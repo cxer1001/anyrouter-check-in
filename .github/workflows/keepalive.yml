@@ -11,5 +11,13 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: gautamkrishnar/keepalive-workflow@v2
+      - uses: actions/checkout@v6
+
+      - name: 自动更新保活记录
+        run: |
+          echo "Last keepalive: $(date -u)" > keepalive.txt
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add keepalive.txt
+          git commit -m "ci: 自动保活更新 [skip ci]" || exit 0
+          git push
